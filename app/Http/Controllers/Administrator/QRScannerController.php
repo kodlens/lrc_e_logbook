@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Models\Franchise;
-use App\Models\User;
-
+use App\Models\EntranceLog;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -26,23 +24,6 @@ class QRScannerController extends Controller
     }
 
 
-    public function validateQR(Request $req){
-        //$authUser = Auth::user();
-
-        //$user = User::where('qr_ref', $qr)->first();
-
-        // $dateNow = date('Y-m-d');
-        // $timeNow = date('H:i');
-
-        $data = Franchise::where('franchise_reference', $req->data)
-            ->first();
-        if($data)
-            return $data;
-        else
-            return '';
-        //return $exist;
-    }
-
     public function show($id){
         $data = DB::table('franchises as a')
             ->leftJoin('provinces as b', 'a.province', 'b.provCode')
@@ -62,16 +43,11 @@ class QRScannerController extends Controller
     public function store(Request $req){
         //return $req;
 
-        $user = Auth::user();
 
-        $req->validate([
-            'franchise_reference' => ['required'],
-            'date_acquired' => ['required'],
-            'operator_name' => ['required'],
-            'vehicle_reference' => ['required'],
-            'chassis_reference' => ['required'],
-            'plate_no' => ['required'],
-        ]);
+        // $req->validate([
+        //     'student_id' => ['required'],
+        //     'student_name' => ['required'],
+        // ]);
 
         $date =  $req->date_acquired;
         $ndate = date("Y-m-d", strtotime($date)); //convert to date format UNIX
@@ -79,30 +55,20 @@ class QRScannerController extends Controller
         /*$time = $req->app_time;
         $ntime = date('H:i:s',strtotime($time)); //convert to format time UNIX*/
 
-        Franchise::create([
-            'franchise_reference' => $req->franchise_reference,
-            'date_acquired' => $ndate,
-            'operator_name' => strtoupper($req->operator_name),
-            'province' => strtoupper($req->province),
-            'city' => strtoupper($req->city),
-            'barangay' => strtoupper($req->barangay),
-            'street' => strtoupper($req->street),
-
-            'vehicle_reference' => strtoupper($req->vehicle_reference),
-            'chassis_reference' => strtoupper($req->chassis_reference),
-            'make' => strtoupper($req->make),
-            'plate_no' => strtoupper($req->plate_no),
-
-            'route_operation' => strtoupper($req->route_operation),
-            'cab_no' => strtoupper($req->cab_no),
-            'sysuser' => strtoupper($user->username),
-
+        EntranceLog::create([
+            'student_id' => $req->student_id,
+            'fullname' => strtoupper($req->fullname),
+            'program' => strtoupper($req->program),
+            'year_level' => strtoupper($req->year_level),
+            'contact_no' => strtoupper($req->contact_no),
+            'date_entry' => now(),
         ]);
 
         return response()->json([
             'status' => 'saved'
         ],200);
     }
+
 
     public function edit($id){
 

@@ -2,8 +2,27 @@
     <div>
 
         <div class="section">
+
             <div class="columns is-centered">
                 <div class="column is-6">
+
+                    <div class="columns">
+                        <div class="column">
+                            <h2> <b> How to get your QR code? </b> </h2>
+                            <ol type="1" class="m-3">
+                                <li>Login to your student <a href="http://mygadtc.gadtc.edu.ph/login">portal</a>.</li>
+                                <li>Below the enroll button are your QR code. </li>
+                                <li>Scan the QR code using the camera.</li>  
+                            </ol>   
+                        </div>
+                    </div>
+
+                    <div class="columns">
+                        <div class="column">
+                            <h2 style="text-align: center;"> <b> Scan QR here! </b> </h2>
+                        </div>
+                    </div>
+
                     <div class="camera">
                         <qrcode-stream :camera="camera" @decode="onDecode" @init="onInit">
                             <div v-if="validationSuccess" class="validation-success">
@@ -20,18 +39,19 @@
                         </qrcode-stream>
                     </div>
 
-                    <p class="decode-result">QR Code: <b>{{ result }}</b></p>
+                   
 
                     <div class="buttons mt-1 is-centered">
                         <b-button @click="turnCameraOn" label="TURN ON"></b-button>
                         <b-button @click="turnCameraOff" label="TURN OFF"></b-button>
-
                     </div>
 
                 </div><!--col-->
             </div><!--close div -->
 
         </div><!--section -->
+
+        
 
     </div><!--root div-->
 </template>
@@ -49,6 +69,9 @@ export default {
             isModalValidModal: false,
 
             data: {},
+
+            modalResult: false,
+
         }
     },
 
@@ -66,33 +89,34 @@ export default {
 
         async onDecode (content) {
             //console.log(content);
-            this.result = content;
+            this.result = content.split(';');
+
             this.turnCameraOff();
+           
 
             // pretend it's taking really long
             this.isProcessing = true;
             //await this.timeout(3000);
 
-            axios.post('/validate-qr/', {
-                data : content
+            axios.post('/submit-details/', {
+                student_id : this.result[0].split(':')[1],
+                fullname : this.result[1].split(':')[1],
+                program : this.result[3].split(':')[1].split('-')[0],
+                year_level : this.result[3].split(':')[1].split('-')[1],
+                contact_no : this.result[2].split(':')[1],
             }).then(res=>{
-                this.user = res.data;
-                this.isProcessing = false;
-
-                if(res.data !== ''){
-                    this.isValid = true;
-                    this.data = res.data;
-                    //this.loadAsyncData();
-                    //this.submitTrack();
-                }else{
-                    this.isProcessing = false;
-                    this.isValid = false;
-                    this.data = {};
-                }
+               this.alertBox()
             }).catch(err=>{
                 this.isProcessing = false;
                 this.data = {};
             })
+            
+           
+           
+
+            this.isProcessing = false;
+            this.isValid = false;
+
             //this.isValid = content.startsWith('http') //this will return boolean value
 
             // some more delay, so users have time to read the message
@@ -114,6 +138,13 @@ export default {
             })
         },
 
+        alertBox(){
+            this.$buefy.snackbar.open({
+                message: "Successfully scanned.",
+                position: 'is-top',
+            })
+        }
+
     },
 
     computed: {
@@ -130,6 +161,10 @@ export default {
             return this.isValid === false
         },
     },
+
+    mounted(){
+        this.turnCameraOn()
+    }
 
 
 }

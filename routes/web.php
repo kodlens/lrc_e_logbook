@@ -49,7 +49,7 @@ Route::resource('/dashboard', App\Http\Controllers\Administrator\DashboardContro
 
 Route::resource('/users', App\Http\Controllers\Administrator\UserController::class);
 Route::get('/get-users', [App\Http\Controllers\Administrator\UserController::class, 'getUsers']);
-Route::get('/get-user-offices', [App\Http\Controllers\Administrator\UserController::class, 'getOffices']);
+
 Route::post('/reset-password/{id}', [App\Http\Controllers\Administrator\UserController::class, 'resetPassword']);
 
 
@@ -63,6 +63,8 @@ Route::get('/franchise-show-qr/{qrref}', [App\Http\Controllers\Administrator\Fra
 //QR Scanner
 Route::resource('/qr-scanner', App\Http\Controllers\Administrator\QRScannerController::class);
 Route::post('/validate-qr', [App\Http\Controllers\Administrator\QRScannerController::class, 'validateQR']);
+Route::post('/submit-details', [App\Http\Controllers\Administrator\QRScannerController::class, 'store']);
+
 
 
 // Route::resource('/ordinance', App\Http\Controllers\Administrator\OrdinanceController::class);

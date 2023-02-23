@@ -129,6 +129,8 @@ $navbar-height: 5rem;
 $navbar-item-img-max-height: 4rem;
 
 
+//$snackbar-background-color: orange;
+
 //$navbar-burger-color: white;
 //$navbar-item-color: #ffffff;
 //$navbar-item-hover-color: #a7f1a7;
@@ -160,8 +162,12 @@ $navbar-item-img-max-height: 4rem;
 }
 
 
-@import "~buefy/src/scss/buefy";
 
+
+
+
+
+@import "~buefy/src/scss/buefy";
 
 
 

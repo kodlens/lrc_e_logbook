@@ -14,12 +14,13 @@ class CreateEntranceLogsTable extends Migration
     public function up()
     {
         Schema::create('entrance_logs', function (Blueprint $table) {
-            $table->id("entrance_logs_id");
-            $table->string("full_name")->nullable();
+            $table->id("entrance_log_id");
+            $table->string("student_id")->nullable();
+            $table->string("fullname")->nullable();
             $table->string("program")->nullable();
             $table->string("year_level")->nullable();
             $table->string("contact_no")->nullable();
-            $table->dateTime("date")->nullable();
+            $table->date("date_entry")->nullable();
             $table->timestamps();
         });
     }
