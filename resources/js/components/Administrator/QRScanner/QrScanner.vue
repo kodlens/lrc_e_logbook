@@ -42,8 +42,8 @@
                    
 
                     <div class="buttons mt-1 is-centered">
-                        <b-button @click="turnCameraOn" label="TURN ON"></b-button>
-                        <b-button @click="turnCameraOff" label="TURN OFF"></b-button>
+                        <!-- <b-button @click="turnCameraOn" label="TURN ON"></b-button>
+                        <b-button @click="turnCameraOff" label="TURN OFF"></b-button> -->
                     </div>
 
                 </div><!--col-->
@@ -125,7 +125,26 @@ export default {
         },
 
         turnCameraOn () {
-            this.camera = 'auto';
+
+            let details = navigator.userAgent;
+      
+            /* Creating a regular expression
+            containing some mobile devices keywords
+            to search it in details string*/
+            let regexp = /android|iphone|kindle|ipad/i;
+            
+            /* Using test() method to search regexp in details
+            it returns boolean value*/
+            let isMobileDevice = regexp.test(details);
+            
+            if (isMobileDevice) {
+                console.log('Mobile')
+                this.camera = 'front';
+            } else {
+                console.log('Desktop')
+                this.camera = 'auto';
+            }
+            
         },
 
         turnCameraOff () {
@@ -143,6 +162,27 @@ export default {
                 message: "Successfully scanned.",
                 position: 'is-top',
             })
+        },
+
+
+        checkUserAgent(){
+            let details = navigator.userAgent;
+      
+            /* Creating a regular expression
+            containing some mobile devices keywords
+            to search it in details string*/
+            let regexp = /android|iphone|kindle|ipad/i;
+            
+            /* Using test() method to search regexp in details
+            it returns boolean value*/
+            let isMobileDevice = regexp.test(details);
+            
+            if (isMobileDevice) {
+                console.log('Mobile')
+            } else {
+                console.log('Desktop')
+                
+            }
         }
 
     },
@@ -163,7 +203,7 @@ export default {
     },
 
     mounted(){
-        this.turnCameraOn()
+        this.turnCameraOn();
     }
 
 

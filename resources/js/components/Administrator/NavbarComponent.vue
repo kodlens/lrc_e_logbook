@@ -32,7 +32,7 @@
                     </b-menu-list>
 
                     <b-menu-list>
-                        <b-menu-item label="Logs" icon="account" tag="a" href="/users"></b-menu-item>
+                        <b-menu-item label="Users" icon="account" tag="a" href="/users"></b-menu-item>
                     </b-menu-list>
 
                     <b-menu-list label="Actions">

@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
     return view('login');
-});
+})->middleware('guest');
 
 Auth::routes([
     'login' => false,

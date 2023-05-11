@@ -7808,7 +7808,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     turnCameraOn: function turnCameraOn() {
-      this.camera = 'auto';
+      var details = navigator.userAgent;
+      /* Creating a regular expression
+      containing some mobile devices keywords
+      to search it in details string*/
+
+      var regexp = /android|iphone|kindle|ipad/i;
+      /* Using test() method to search regexp in details
+      it returns boolean value*/
+
+      var isMobileDevice = regexp.test(details);
+
+      if (isMobileDevice) {
+        console.log('Mobile');
+        this.camera = 'front';
+      } else {
+        console.log('Desktop');
+        this.camera = 'auto';
+      }
     },
     turnCameraOff: function turnCameraOff() {
       this.camera = 'off';
@@ -7823,6 +7840,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         message: "Successfully scanned.",
         position: 'is-top'
       });
+    },
+    checkUserAgent: function checkUserAgent() {
+      var details = navigator.userAgent;
+      /* Creating a regular expression
+      containing some mobile devices keywords
+      to search it in details string*/
+
+      var regexp = /android|iphone|kindle|ipad/i;
+      /* Using test() method to search regexp in details
+      it returns boolean value*/
+
+      var isMobileDevice = regexp.test(details);
+
+      if (isMobileDevice) {
+        console.log('Mobile');
+      } else {
+        console.log('Desktop');
+      }
     }
   },
   computed: {
@@ -28821,7 +28856,7 @@ var render = function () {
                     [
                       _c("b-menu-item", {
                         attrs: {
-                          label: "Logs",
+                          label: "Users",
                           icon: "account",
                           tag: "a",
                           href: "/users",
@@ -28925,22 +28960,7 @@ var render = function () {
             1
           ),
           _vm._v(" "),
-          _c(
-            "div",
-            { staticClass: "buttons mt-1 is-centered" },
-            [
-              _c("b-button", {
-                attrs: { label: "TURN ON" },
-                on: { click: _vm.turnCameraOn },
-              }),
-              _vm._v(" "),
-              _c("b-button", {
-                attrs: { label: "TURN OFF" },
-                on: { click: _vm.turnCameraOff },
-              }),
-            ],
-            1
-          ),
+          _c("div", { staticClass: "buttons mt-1 is-centered" }),
         ]),
       ]),
     ]),
