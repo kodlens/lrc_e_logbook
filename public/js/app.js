@@ -7687,6 +7687,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -7696,10 +7714,12 @@ __webpack_require__.r(__webpack_exports__);
       sortField: 'entrance_log_id',
       sortOrder: 'desc',
       page: 1,
-      perPage: 5,
+      perPage: 15,
       defaultSortDirection: 'asc',
       search: {
-        fullname: ''
+        fullname: '',
+        start_date: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+        end_date: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
       },
       isModalCreate: false,
       fields: {},
@@ -7718,7 +7738,7 @@ __webpack_require__.r(__webpack_exports__);
     loadAsyncData: function loadAsyncData() {
       var _this = this;
 
-      var params = ["sort_by=".concat(this.sortField, ".").concat(this.sortOrder), "lname=".concat(this.search.fullname), "perpage=".concat(this.perPage), "page=".concat(this.page)].join('&');
+      var params = ["sort_by=".concat(this.sortField, ".").concat(this.sortOrder), "fulname=".concat(this.search.fullname), "start=".concat(this.$formatDate(this.search.start_date)), "end=".concat(this.$formatDate(this.search.end_date)), "perpage=".concat(this.perPage), "page=".concat(this.page)].join('&');
       this.loading = true;
       axios.get("/get-entrance-logs?".concat(params)).then(function (_ref) {
         var data = _ref.data;
@@ -7757,6 +7777,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     setPerPage: function setPerPage() {
       this.loadAsyncData();
+    },
+    printPreview: function printPreview() {
+      var params = ["fulname=".concat(this.search.fullname), "start=".concat(this.$formatDate(this.search.start_date)), "end=".concat(this.$formatDate(this.search.end_date))].join('&');
+      window.location = '/entrance-logs-print-preview?' + params;
     }
   },
   mounted: function mounted() {
@@ -8881,6 +8905,25 @@ Vue.use(buefy__WEBPACK_IMPORTED_MODULE_2__["default"]);
 Vue.use((vue_qrcode_reader__WEBPACK_IMPORTED_MODULE_0___default())); //https://gruhn.github.io/vue-qrcode-reader/demos/CustomTracking.html
 
 Vue.component((_chenfengyuan_vue_qrcode__WEBPACK_IMPORTED_MODULE_1___default().name), (_chenfengyuan_vue_qrcode__WEBPACK_IMPORTED_MODULE_1___default()));
+
+Vue.prototype.$formatDate = function (value) {
+  if (!value) return '';
+  var date = new Date(value);
+  var year = date.getFullYear();
+  var month = String(date.getMonth() + 1).padStart(2, '0');
+  var day = String(date.getDate()).padStart(2, '0');
+  return "".concat(year, "-").concat(month, "-").concat(day);
+};
+
+Vue.prototype.$formatTime = function (value) {
+  var timeString = value;
+  var H = +timeString.substr(0, 2);
+  var h = H % 12 || 12;
+  var ampm = H < 12 ? " AM" : " PM";
+  timeString = h + timeString.substr(2, 3) + ampm;
+  return timeString;
+};
+
 Vue.filter('formatTime', function (value) {
   var timeString = value;
   var H = +timeString.substr(0, 2);
@@ -29054,10 +29097,10 @@ var render = function () {
                 [_vm._v("ENTRANCE LOGS")]
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "level" }, [
+              _c("div", { staticClass: "columns" }, [
                 _c(
                   "div",
-                  { staticClass: "level-left" },
+                  { staticClass: "column" },
                   [
                     _c(
                       "b-field",
@@ -29123,79 +29166,109 @@ var render = function () {
                   1
                 ),
                 _vm._v(" "),
-                _c("div", { staticClass: "level-right" }, [
-                  _c(
-                    "div",
-                    { staticClass: "level-item" },
-                    [
-                      _c(
-                        "b-field",
-                        { attrs: { label: "Search" } },
-                        [
-                          _c("b-input", {
-                            attrs: {
-                              type: "text",
-                              placeholder: "Search Lastname",
+                _c(
+                  "div",
+                  { staticClass: "column" },
+                  [
+                    _c(
+                      "b-field",
+                      { attrs: { label: "Search" } },
+                      [
+                        _c("b-input", {
+                          attrs: { type: "text", placeholder: "Search Name" },
+                          nativeOn: {
+                            keyup: function ($event) {
+                              if (
+                                !$event.type.indexOf("key") &&
+                                _vm._k(
+                                  $event.keyCode,
+                                  "enter",
+                                  13,
+                                  $event.key,
+                                  "Enter"
+                                )
+                              ) {
+                                return null
+                              }
+                              return _vm.loadAsyncData.apply(null, arguments)
                             },
-                            nativeOn: {
-                              keyup: function ($event) {
-                                if (
-                                  !$event.type.indexOf("key") &&
-                                  _vm._k(
-                                    $event.keyCode,
-                                    "enter",
-                                    13,
-                                    $event.key,
-                                    "Enter"
-                                  )
-                                ) {
-                                  return null
-                                }
-                                return _vm.loadAsyncData.apply(null, arguments)
+                          },
+                          model: {
+                            value: _vm.search.fullname,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.search, "fullname", $$v)
+                            },
+                            expression: "search.fullname",
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "p",
+                          { staticClass: "control" },
+                          [
+                            _c(
+                              "b-tooltip",
+                              {
+                                attrs: { label: "Search", type: "is-success" },
                               },
-                            },
-                            model: {
-                              value: _vm.search.fullname,
-                              callback: function ($$v) {
-                                _vm.$set(_vm.search, "fullname", $$v)
-                              },
-                              expression: "search.fullname",
-                            },
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "p",
-                            { staticClass: "control" },
-                            [
-                              _c(
-                                "b-tooltip",
-                                {
+                              [
+                                _c("b-button", {
                                   attrs: {
-                                    label: "Search",
-                                    type: "is-success",
+                                    type: "is-primary",
+                                    "icon-right": "account-filter",
                                   },
-                                },
-                                [
-                                  _c("b-button", {
-                                    attrs: {
-                                      type: "is-primary",
-                                      "icon-right": "account-filter",
-                                    },
-                                    on: { click: _vm.loadAsyncData },
-                                  }),
-                                ],
-                                1
-                              ),
-                            ],
-                            1
-                          ),
-                        ],
-                        1
-                      ),
-                    ],
-                    1
-                  ),
-                ]),
+                                  on: { click: _vm.loadAsyncData },
+                                }),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        ),
+                      ],
+                      1
+                    ),
+                  ],
+                  1
+                ),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "columns" }, [
+                _c(
+                  "div",
+                  { staticClass: "column" },
+                  [
+                    _c(
+                      "b-field",
+                      { attrs: { label: "Select Date" } },
+                      [
+                        _c("b-datepicker", {
+                          attrs: { placeholder: "Start Date" },
+                          model: {
+                            value: _vm.search.start_date,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.search, "start_date", $$v)
+                            },
+                            expression: "search.start_date",
+                          },
+                        }),
+                        _vm._v(" "),
+                        _c("b-datepicker", {
+                          attrs: { placeholder: "End Date" },
+                          model: {
+                            value: _vm.search.end_date,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.search, "end_date", $$v)
+                            },
+                            expression: "search.end_date",
+                          },
+                        }),
+                      ],
+                      1
+                    ),
+                  ],
+                  1
+                ),
               ]),
               _vm._v(" "),
               _c(
@@ -29218,6 +29291,22 @@ var render = function () {
                   on: { "page-change": _vm.onPageChange, sort: _vm.onSort },
                 },
                 [
+                  _c(
+                    "div",
+                    { staticClass: "buttons" },
+                    [
+                      _c("b-button", {
+                        attrs: {
+                          label: "Print Preview",
+                          "icon-left": "printer",
+                          type: "is-info",
+                        },
+                        on: { click: _vm.printPreview },
+                      }),
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
                   _c("b-table-column", {
                     attrs: { field: "user_id", label: "Student Id" },
                     scopedSlots: _vm._u([

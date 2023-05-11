@@ -61,6 +61,7 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
     Route::resource('/entrance-logs', App\Http\Controllers\Administrator\EntranceLogController::class);
     Route::get('/get-entrance-logs', [App\Http\Controllers\Administrator\EntranceLogController::class, 'getData']);
+    Route::get('/entrance-logs-print-preview', [App\Http\Controllers\Administrator\EntranceLogController::class, 'printPreview']);
 
 
 

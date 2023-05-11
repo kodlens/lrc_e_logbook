@@ -7,8 +7,9 @@
 
                         <div class="is-flex is-justify-content-center mb-2" style="font-size: 20px; font-weight: bold;">ENTRANCE LOGS</div>
 
-                        <div class="level">
-                            <div class="level-left">
+
+                        <div class="columns">
+                            <div class="column">
                                 <b-field label="Page">
                                     <b-select v-model="perPage" @input="setPerPage">
                                         <option value="5">5 per page</option>
@@ -24,21 +25,32 @@
                                 </b-field>
                             </div>
 
-                            <div class="level-right">
-                                <div class="level-item">
-                                    <b-field label="Search">
-                                        <b-input type="text"
-                                                 v-model="search.fullname" placeholder="Search Lastname"
-                                                 @keyup.native.enter="loadAsyncData"/>
-                                        <p class="control">
-                                             <b-tooltip label="Search" type="is-success">
-                                            <b-button type="is-primary" icon-right="account-filter" @click="loadAsyncData"/>
-                                             </b-tooltip>
-                                        </p>
-                                    </b-field>
-                                </div>
+                            <div class="column">
+                                <b-field label="Search">
+                                    <b-input type="text"
+                                                v-model="search.fullname" placeholder="Search Name"
+                                                @keyup.native.enter="loadAsyncData"/>
+                                    <p class="control">
+                                            <b-tooltip label="Search" type="is-success">
+                                        <b-button type="is-primary" icon-right="account-filter" @click="loadAsyncData"/>
+                                            </b-tooltip>
+                                    </p>
+                                </b-field>
                             </div>
                         </div>
+
+                        <div class="columns">
+                            <div class="column">
+                                <b-field label="Select Date">
+                                    <b-datepicker
+                                        v-model="search.start_date" placeholder="Start Date"/>
+
+                                        <b-datepicker
+                                            v-model="search.end_date" placeholder="End Date"/>
+                                </b-field>
+                            </div>
+                        </div>
+                        
 
                         <b-table
                             :data="data"
@@ -55,6 +67,12 @@
                             backend-sorting
                             :default-sort-direction="defaultSortDirection"
                             @sort="onSort">
+
+                            <div class="buttons">
+                                <b-button label="Print Preview" icon-left="printer"
+                                @click="printPreview"
+                                type="is-info"></b-button>
+                            </div>
 
                             <b-table-column field="user_id" label="Student Id" v-slot="props">
                                 {{ props.row.student_id }}
@@ -102,12 +120,14 @@ export default{
             sortField: 'entrance_log_id',
             sortOrder: 'desc',
             page: 1,
-            perPage: 5,
+            perPage: 15,
             defaultSortDirection: 'asc',
 
 
             search: {
                 fullname: '',
+                start_date: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+                end_date: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
             },
 
             isModalCreate: false,
@@ -134,7 +154,9 @@ export default{
         loadAsyncData() {
             const params = [
                 `sort_by=${this.sortField}.${this.sortOrder}`,
-                `lname=${this.search.fullname}`,
+                `fulname=${this.search.fullname}`,
+                `start=${this.$formatDate(this.search.start_date)}`,
+                `end=${this.$formatDate(this.search.end_date)}`,
                 `perpage=${this.perPage}`,
                 `page=${this.page}`
             ].join('&')
@@ -179,6 +201,16 @@ export default{
         setPerPage(){
             this.loadAsyncData()
         },
+
+        printPreview(){
+            const params = [
+                `fulname=${this.search.fullname}`,
+                `start=${this.$formatDate(this.search.start_date)}`,
+                `end=${this.$formatDate(this.search.end_date)}`,
+            ].join('&')
+
+            window.location = '/entrance-logs-print-preview?' + params
+        }
 
     },
 
