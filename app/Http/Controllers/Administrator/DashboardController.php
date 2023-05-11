@@ -11,9 +11,7 @@ use App\Models\AppointmentType;
 class DashboardController extends Controller
 {
     //
-    public function __construct(){
-        $this->middleware('auth');
-    }
+
 
     public function index(){
         return view('administrator.dashboard');

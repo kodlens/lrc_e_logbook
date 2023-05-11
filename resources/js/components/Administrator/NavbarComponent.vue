@@ -35,6 +35,12 @@
                         <b-menu-item label="Users" icon="account" tag="a" href="/users"></b-menu-item>
                     </b-menu-list>
 
+                    <b-menu-list>
+                        <b-menu-item label="Entrance Log" 
+                            icon="view-list-outline" 
+                            tag="a" href="/entrance-logs"></b-menu-item>
+                    </b-menu-list>
+
                     <b-menu-list label="Actions">
                         <b-menu-item @click="logout" label="Logout"></b-menu-item>
                     </b-menu-list>

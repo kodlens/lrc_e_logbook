@@ -39,8 +39,6 @@
                         </qrcode-stream>
                     </div>
 
-                   
-
                     <div class="buttons mt-1 is-centered">
                         <!-- <b-button @click="turnCameraOn" label="TURN ON"></b-button>
                         <b-button @click="turnCameraOff" label="TURN OFF"></b-button> -->
@@ -98,7 +96,7 @@ export default {
             this.isProcessing = true;
             //await this.timeout(3000);
 
-            axios.post('/submit-details/', {
+            axios.post('/submit-details', {
                 student_id : this.result[0].split(':')[1],
                 fullname : this.result[1].split(':')[1],
                 program : this.result[3].split(':')[1].split('-')[0],
